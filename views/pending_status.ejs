@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pending Status</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+   
+   .navbar{
+    height:90px;
+    background-color:#0C359E;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+   }
+
+   .menu-button {
+    background-color:  rgb(59, 112, 235);
+    color:white;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.menu-button:hover {
+    background-color: rgb(71, 83, 220);
+}
+
+.dropdown{
+    width: 350px;
+    margin-top: 10px;;
+}
+
+
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #efe6e6;
+}
+
+h2{
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+table {
+   border-collapse: collapse;
+   width: 100%;
+ }
+ th, td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+    }
+
+th {
+   background-color: #f2f2f2;
+    }
+  
+
+  </style>
+</head>
+<body>
+    <div class="navbar">
+
+         
+          <a href="/home" ><button class="menu-button" >
+            HOME
+        </button></a>  
+  
+    
+    <div class="dropdown">
+        <div class="form-group">
+            <select class="form-control" id="group" name="group" required>
+                <option value="">Select group name</option>
+            </select>
+        </div>
+      </div>
+
+    <div class="dropdown">
+        <div class="form-group">
+            <select class="form-control" id="year" name="year" required>
+                <option value="">Select Year</option>
+            </select>
+        </div>
+      </div>
+
+     
+      <div class="nav">    
+            <button class="menu-button" onclick="sendRequest()">
+                Check Status
+            </button>
+    </div>
+
+</div>
+
+<h2>User Pending Details</h2>
+<table id="pendingTable">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Monthly Pending</th>
+            <th>Yearly Pending</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+
+    </tbody>
+</table>
+
+
+
+
+
+</body>
+
+<script>
+
+function sendRequest() {
+
+    console.log("sendRequest");
+   const selectedYear = document.getElementById('year').value;
+   const selectedGroupName = document.getElementById('group').value;
+
+     console.log(selectedYear);
+     console.log(selectedGroupName) ;
+
+     
+if(selectedYear && selectedGroupName){
+    fetch('/pending', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ selectedYear:selectedYear,selectedGroupName:selectedGroupName })
+            })
+            .then(response => response.json())
+            .then(data => {
+               
+                const tableBody = document.getElementById('tableBody');
+
+                if (data.filteredResult && data.filteredResult.length > 0) {
+        function fillTable(data) {
+            data.filteredResult.forEach((user) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.user}</td>
+                    <td>${user.monthly_pending}</td>
+                    <td>${user.yearly_pending}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        fillTable(data);
+          } else {
+       
+                const messageRow = document.createElement('tr');
+                messageRow.innerHTML = `
+                     <td colspan="3">Users are Not Available</td>
+                   `;
+               tableBody.appendChild(messageRow);
+               }
+            })
+                  .catch(error => {
+               console.error('Error:', error);
+  
+                  });
+                     } else {
+                               alert('Please select both group and year.');
+                       }
+  
+                    }
+
+
+
+    $(document).ready(function() {
+        $.ajax({
+            url: "/groups", 
+            type: "GET",
+            success: function(groups) {
+                console.log(groups);
+                groups.groups.forEach(function(group) {
+                    $('#group').append($('<option>', {
+                        value: group._id, 
+                        text: group.name 
+                        
+                    }));
+                    });
+
+                    groups.uniqueYears.forEach(function(group) {
+                    $('#year').append($('<option>', {
+                        value: group, 
+                        text: group    
+                    }));
+                   
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error); 
+            }
+        });
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #387ADF;
+        }
+
+        .navbar{
+    height:90px;
+    background-color:#0C359E;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+   }
+
+   .heading{
+    width:500px;
+    text-align:center;
+    font-family:'Times New Roman', Times, serif;
+    font-size: 50px;
+    font-weight: bold;
+    color:rgb(182, 208, 54);
+  }
+
+  #home {
+  height: 40px;
+  width:100px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgb(6, 151, 6);
+  color: aliceblue;
+  font-weight: bold;
+  font-size: 12px;
+  margin-left: 30px;
+  margin-top: 15px;
+}
+        .form-column {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            height:540px;
+        }
+        .data-column {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        #userAvailability{
+            font-size: small;
+        }
+        input{
+            font-size: large;
+            border-radius: 10px;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="navbar">
+   
+        <a href="/home" ><button class="menu-button" id="home" >
+          HOME
+      </button></a>  
+
+      <div class="heading">Jai Shree Ram</div>
+
+      <a href="/user_details" ><button class="menu-button" id="home" >
+        HISTORY
+    </button></a>  
+
+</div>
+
+
+    <div class="container mt-5">
+        <form id="createAccountForm" action="/create_acc" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-column p-4">
+                    <h1 class="text-center mb-4">Create Account</h1>
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                            <small id="userAvailability" class="form-text text-muted"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="groupname">Group Name:</label>
+                            <input type="text" id="groupname" name="groupname" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="mothername">Mother Name:</label>
+                            <input type="text" id="mothername" name="mothername" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="job">Job:</label>
+                            <input type="text" id="job" name="job" class="form-control" readonly>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" id="submit-button" class="btn btn-primary">Create Account</button>
+                        </div>
+                  
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="data-column p-4">
+                    <h2 class="text-center mb-4">User Details</h2>
+                    <div class="form-group">
+                        <label for="Mobile No.">Mobile No. :</label>
+                        <input type="text" id="mobileNo" name="mobileNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="Marital Status">Marital Status:</label>
+                        <input type="text" id="maritalStatus" name="maritalStatus" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="Address">Address:</label>
+                        <input type="text" id="Address" name="Address" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <input type="text" id="gender" name="gender" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="eligible">Eligible:</label>
+                        <input type="text" id="eligible" name="eligible" class="form-control" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+
+    <!-- Bootstrap JS and Fetch Polyfill for older browsers -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.6.2/fetch.min.js"></script>
+
+    <script>
+        document.getElementById('username').addEventListener('input', function() {
+            var username = this.value;
+            var userAvailability = document.getElementById('userAvailability');
+            userAvailability.textContent = ''; 
+
+           
+            fetch('/user_pay_in_notin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) { // Use data.exists instead of data.exits
+                    console.log(data.userData);
+                    document.getElementById('groupname').value = data.userData.group;
+                    document.getElementById('mothername').value = data.userData.motherName;
+                    document.getElementById('job').value = data.userData.job;
+                    document.getElementById('mobileNo').value = data.userData.mobileNo;
+                    document.getElementById('maritalStatus').value = data.userData.maritalStatus;
+                    document.getElementById('Address').value = data.userData.address;
+                    document.getElementById('gender').value = data.userData.gender;
+                    document.getElementById('eligible').value = data.userData.eligible;
+                    userAvailability.textContent = 'You can use this username';
+                    document.getElementById('submit-button').disabled = false;
+                } else {
+                    userAvailability.textContent = 'User not found';
+                    document.getElementById('submit-button').disabled = true;
+
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+<script>
+    window.addEventListener('beforeunload', function(event) {
+    
+    document.getElementById('createAccountForm').reset(); 
+  });
+  </script>
+</body>
+</html>

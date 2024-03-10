@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User  Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #fcfdfe;
+    }
+    .container {
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    h2{
+      text-align: center;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    ::-webkit-scrollbar {
+  width: 8px;
+}
+#name-validation{
+    color: red;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Register Form</h2>
+    <form action="/" method="post" id="user-form">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+            <div id="name-validation"></div> 
+        </div>   
+      <div class="form-group">
+        <label for="motherName">Mother's Name:</label>
+        <input type="text" class="form-control" id="motherName" name="motherName" placeholder="Enter your mother's name" required>
+      </div>
+      <div class="form-group">
+        <label for="group">Group Name:</label>
+        <select class="form-control" id="group" name="group" required>
+            <option value="">Select group name</option>
+        </select>
+    </div>
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" >
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender"  name="gender">
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="mobileNo">Mobile Number:</label>
+        <input type="tel" class="form-control" id="mobileNo" name="mobileNo" placeholder="Enter your mobile number">
+      </div>
+      <div class="form-group">
+        <label for="maritalStatus">Marital Status:</label>
+        <select class="form-control" id="maritalStatus" name="maritalStatus">
+          <option value="">Select marital status</option>
+          <option value="single">Single</option>
+          <option value="married">Married</option>
+          <option value="divorced">Divorced</option>
+          <option value="widowed">Widowed</option>
+        </select>
+      </div>
+      <div class="form-group" >
+        <label for="job">Job:</label>
+        <input type="text" class="form-control" id="job" name="job" placeholder="Enter your job">
+      </div>
+      <div class="form-group">
+        <label for="address">Address:</label>
+        <textarea class="form-control" id="address" rows="3" name="address" placeholder="Enter your address"></textarea>
+      </div>
+      <button type="submit"  id="submit-button" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</body>
+
+<script>
+    $(document).ready(function() {
+
+      console.log("ready!");
+        $.ajax({
+            url: "/groups", 
+            type: "GET",
+            success: function(groups) {
+                console.log(groups);
+                groups.groups.forEach(function(group) {
+                    $('#group').append($('<option>', {
+                        value: group._id, 
+                        text: group.name 
+                        
+                    }));
+                   
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error); // Handle errors if any
+            }
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('name').addEventListener('input', function() {
+        const name = this.value;
+
+        $.ajax({
+            url: '/check-name', 
+            method: 'POST', 
+            data: { name: name }, 
+            success: function(response) {
+                if (response.exists) {
+                    console.log('Name already exists');
+                    $('#name-validation').text('Name already exists');
+                    $('#submit-button').prop('disabled', true);
+                } else {
+                    console.log('available');
+                    $('#name-validation').text('');
+                    $('#submit-button').prop('disabled', false);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error); 
+            }
+        });
+    });
+</script>
+
+<script>
+  window.addEventListener('beforeunload', function(event) {
+  
+  document.getElementById('user-form').reset(); 
+});
+</script>
+
+</html>

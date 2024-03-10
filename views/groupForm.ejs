@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form with Bootstrap Styling</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #387ADF;
+      padding: 20px;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    #name-validation{
+    color: red;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center mb-4">Information Form</h2>
+    <form action="/group" method="post" id="groupForm">
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter New Group Name" required>
+            <div id="name-validation"></div> 
+        </div> 
+
+      <div class="form-group">
+        <label for="head">Head:</label>
+        <input type="text" class="form-control" id="head" name="head" placeholder="Enter the name of main person in the group" required>
+      </div>
+      <div class="form-group">
+        <label for="place">Place:</label>
+        <input type="text" class="form-control" id="place" name="place" placeholder="Enter the place" required>
+      </div>
+      <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</body>
+<script>
+    document.getElementById('name').addEventListener('input', function() {
+        const name = this.value;
+
+        $.ajax({
+            url: '/check-group', 
+            method: 'POST', 
+            data: { name: name }, 
+            success: function(response) {
+                if (response.exists) {
+                    console.log('Name already exists');
+                    $('#name-validation').text('Name already exists');
+                    $('#submit-button').prop('disabled', true);
+                } else {
+                    console.log('available');
+                    $('#name-validation').text('');
+                    $('#submit-button').prop('disabled', false);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error); 
+            }
+        });
+    });
+</script>
+
+<script>
+  window.addEventListener('beforeunload', function(event) {
+  
+  document.getElementById('groupForm').reset(); 
+});
+</script>
+</html>
+
