@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal</title>
+
+    <style>
+        .question {
+            cursor: pointer;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .answer {
+            display: none;
+            padding-left: 20px;
+        }
+
+        ::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="navigation">
+    <div class="question" onclick="toggleAnswer('q1')">1) Write a program for distance vector algorithm to find suitable path for transmission.</div>
+    <div class="answer" id="q1">
+        <pre>
+            <code>
+                #include&lt;stdio.h&gt;
+                void dist_vector(int n);
+                void init(int n);
+                //creating structure node
+                struct node
+                {
+                unsigned int dist[20],nexthop[20];
+                }route[10];
+                int i,j;
+                //main function
+                void main()
+                {
+                int n,i,j;
+                printf("Enter the number of router");
+                scanf("%d",&n);
+                init(n);
+                printf("Enter the cost matrix(999 no link)\n");
+                for(i=0;i&lt;n;i++)
+                for(j=0;j&lt;n;j++)
+                scanf("%d",&route[i].dist[j]);
+                dist_vector(n);
+                printf("\n------------------------------------");
+                printf("\nupdated distance vector table\n");
+                printf("--------------------------------------\n");
+                for(i=0;i&lt;n;i++)
+                {
+                for(j=0;j&lt;n;j++)
+                {
+                printf("%d\t",route[i].dist[j]);
+                }
+                printf("\n");
+                }
+                printf("\n----------------------------\n");
+                for(i=0;i&lt;n;i++)
+                {
+                printf("\nRouting table for node %c table\n",65+i);
+                printf("-------------------------\n");
+                printf("desti\t Cost\t Next hop\n");
+                printf("--------------------------\n");
+                for(int j=0;j&lt;n;j++)
+                if(i!=j)
+                printf("%c\t%d\t%c\n",65+j,route[i].dist[j],65+route[i].nexthop[j]);
+                }
+                }
+                //initialization
+                void init(int n)
+                {
+                int i,j;
+                for(i=0;i&lt;n;i++)
+                { for(j=0;j&lt;n;j++)
+                { if(i!=j)
+                {
+                route[i].dist[j]=999;
+                route[i].nexthop[j]=-20;
+                }
+                route[i].dist[i]=0;
+                route[i].nexthop[j]=-20;
+                }
+                }
+                }
+                //update
+                void dist_vector(int n)
+                {
+                int count;
+                do {
+                count = 0;
+                for (int i = 0; i &lt; n; i++)
+                {
+                for (int j = 0; j &lt; n; j++)
+                {
+                for (int k = 0; k &lt; n; k++)
+                {
+                if ((route[i].dist[j]) &gt; (route[i].dist[k] + route[k].dist[j]))
+                {
+                route[i].dist[j] = route[i].dist[k] + route[k].dist[j];
+                route[i].nexthop[j] = k;
+                count = 1;
+                }
+                }
+                }
+                }
+                } while (flag);
+                }
+            </code>
+        </pre>
+    </div>
+
+    <div class="question" onclick="toggleAnswer('q2')">2) Using TCP/IP sockets, write a client server program to make the client send the file name to make the server send back the contents of requested file if present.</div>
+    <div class="answer" id="q2">
+        <h3>Client Program</h3>
+        <pre>
+            <code>
+            //client
+            #include<stdio.h>
+            #include<arpa/inet.h>
+            #include<fcntl.h>
+            #include<unistd.h>
+            int main()
+            {
+                int soc,n;
+                int port=5556;
+                char buffer[1024],fname[50];
+                struct sockaddr_in addr;
+                soc=socket(PF_INET,SOCK_STREAM,0);
+                printf("Client Socket created");
+                addr.sin_family=AF_INET;
+                addr.sin_port=port;
+                addr.sin_addr.s_addr=inet_addr("127.0.0.1");
+                while(connect(soc,(struct sockaddr*) &addr,sizeof(addr)))
+                    printf("\n CLIENT IS CONNECTED TO SERVER\n");
+                printf("Enter the file name");
+                scanf("%s",fname);
+                send(soc,fname,sizeof(fname),0);
+                printf("Recieved response\n");
+                while((n=recv(soc,buffer,sizeof(buffer),0))>0)
+                    printf("%s",buffer);
+                return 0;
+            }
+    
+            //server
+            #include<stdio.h>
+            #include<arpa/inet.h>
+            #include<fcntl.h>
+            #include<unistd.h>
+            int main()
+            {
+                int server_soc,fd,n,client_soc;
+                int port=5556;
+                char buffer[1024],fname[50];
+                struct sockaddr_in addr;
+                server_soc=socket(PF_INET,SOCK_STREAM,0);
+                printf("Socket created....\n");
+                addr.sin_family=AF_INET;
+                addr.sin_port=port;
+                addr.sin_addr.s_addr=inet_addr("127.0.0.1");
+                bind(server_soc,(struct sockaddr*)&addr,sizeof(addr));
+                printf("bind to th port number %d",port);
+                printf("\nSERVER IS ONLINE\n");
+                listen(server_soc,5);
+                printf("Listining....\n");
+                client_soc=accept(server_soc,NULL,NULL);
+                printf("server accepted......\n");
+                recv(client_soc,fname,50,0);
+                printf("client Requesting for file %s:",fname);
+                fd=open(fname,O_RDONLY);
+                if(fd<0)
+                    send(client_soc,"\nFile not found...",25,0);
+                else
+                    while((n=read(fd,buffer,sizeof(buffer))) > 0)
+                        send(client_soc,buffer,n,0);
+                close(fd);
+                printf("\ndisconnected......");
+                return 0;
+            }
+           </code>
+        </pre>
+    </div>
+
+    <div class="question" onclick="toggleAnswer('q3')">3) Program for Hamming Code Generation for Error Detection and Correction</div>
+<div class="answer" id="q3">
+    <pre>
+        <code>
+            #include&lt;stdio.h&gt;
+            #include&lt;math.h&gt;
+            int input[5];int messege[20];
+            int ham_calc(int,int);
+            void main()
+            {
+                int n,i,par_bits=0;
+                printf("Enter the length of message");
+                scanf("%d",&n);
+                printf("Enter the Message in bits");
+                for(i=0;i&lt;n;i++)
+                {
+                    scanf("%d",&input[i]);
+                }
+                //redundant bits to add
+                i=1;
+                while(pow(2,i)&lt;=n+i+1)
+                {
+                    i++;
+                    par_bits++;
+                }
+                int tot_bits=par_bits+n;
+                printf("\n total number of bits:%d\n",tot_bits);
+                //positioning parity
+                int j=0,k=0;
+                for(i=0;i&lt;tot_bits;i++)
+                {
+                    if(i==((int)pow(2,k)-1))
+                    {
+                        messege[i]=0;
+                        k++;
+                    }
+                    else
+                    {
+                        messege[i]=input[j];
+                        j++;
+                    }
+                }
+                for(i=0;i&lt;tot_bits;i++)
+                {
+                    printf("Initialized value%d\t",messege[i]);
+                }
+                //updating the parity value
+                for(i=0;i&lt;par_bits;i++)
+                {
+                    int position = (int)pow(2,i);
+                    int value = ham_calc(position,tot_bits);
+                    messege[position-1]=value;
+                }
+                printf("\nThe calculated Code Word is: ");
+                for(i=0;i&lt;tot_bits;i++)
+                    printf("%d",messege[i]);
+                printf("\n");
+                printf("Please enter the received Code Word:\n");
+                for(i=0;i&lt;tot_bits;i++)
+                    scanf("%d",&messege[i]);
+                int error_pos = 0;
+                for(i=0;i&lt;par_bits;i++)
+                {
+                    int position = (int)pow(2,i);
+                    int value = ham_calc(position,tot_bits);
+                    if(value != 0)
+                        error_pos+=position;
+                }
+                if(error_pos == 1)
+                    printf("The received Code Word is correct.\n");
+                else
+                    printf("Error at bit position: %d\n",error_pos);
+            }
+            int ham_calc(int position,int tot_bits)
+            {
+                int count=0,i,j;
+                i=position-1;
+                while(i&lt;tot_bits)
+                {
+                    for(j=i;j&lt;i+position;j++)
+                    {
+                        if(messege[j] == 1)
+                            count++;
+                    }
+                    i=i+2*position;
+                }
+                if(count%2 == 0)
+                    return 0;
+                else
+                    return 1;
+            }
+        </code>
+    </pre>
+</div>
+
+
+<div class="question" onclick="toggleAnswer('q4')">4) Program for Congestion Control Using a Leaky Bucket Algorithm</div>
+<div class="answer" id="q4">
+    <pre>
+        <code>
+        #include<stdio.h>
+        #include<stdlib.h>
+        #include<unistd.h>
+
+        #define NOF_PACKETS 10
+
+        int rn(int a) {
+            int rn = (random() % 10) % a;
+            return rn == 0 ? 1 : rn;
+        }
+
+        int main() {
+            int packet_sz[NOF_PACKETS], i, clk, b_size, o_rate, p_sz_rm = 0, p_sz, p_time, op;
+
+            // Initialize packet sizes randomly
+            for(i = 0; i < NOF_PACKETS; ++i)
+                packet_sz[i] = rn(6) * 10;
+
+            // Display packet sizes
+            printf("Packet sizes:\n");
+            for(i = 0; i < NOF_PACKETS; ++i)
+                printf("Packet [%d]: %d bytes\n", i, packet_sz[i]);
+
+            // Get user input for output rate and bucket size
+            printf("\nEnter the output rate: ");
+            scanf("%d", &o_rate);
+            printf("Enter the bucket size: ");
+            scanf("%d", &b_size);
+
+            for(i = 0; i < NOF_PACKETS; ++i) {
+                if((packet_sz[i] + p_sz_rm) > b_size) {
+                    if(packet_sz[i] > b_size) {
+                        printf("\nIncoming packet size (%d bytes) is greater than bucket capacity (%d bytes) - PACKET REJECTED\n", packet_sz[i], b_size);
+                    } else {
+                        printf("\nBucket capacity exceeded - PACKET REJECTED!!!\n");
+                    }
+                } else {
+                    p_sz_rm += packet_sz[i];
+                    printf("\nIncoming packet size: %d\n", packet_sz[i]);
+                    printf("Bytes remaining to transmit: %d\n", p_sz_rm);
+                    p_time = rn(4) * 10;
+                    printf("Time left for transmission: %d units\n", p_time);
+                    
+                    for(clk = 10; clk <= p_time; clk += 10) {
+                        sleep(1);
+                        if(p_sz_rm) {
+                            if(p_sz_rm <= o_rate) {
+                                op = p_sz_rm;
+                                p_sz_rm = 0;
+                            } else {
+                                op = o_rate;
+                                p_sz_rm -= o_rate;
+                            }
+                            printf("Packets of size %d Transmitted - Bytes remaining to transmit: %d\n", op, p_sz_rm);
+                        } else {
+                            printf("Time left for transmission: %d units\n", p_time - clk);
+                            printf("No packets to transmit!!\n");
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+    </code>
+    </pre>
+</div>
+
+<div class="question" onclick="toggleAnswer('q5')">5) Simulate a three node point to point network with duplex links
+    between them. Set the queue size and vary the bandwidth and find the
+    number of packets.
+</div>
+<div class="answer" id="q5">
+    <pre>
+        <code>
+        set ns [new Simulator]
+        set tf [open p1.tr w]
+        $ns trace-all $tf
+        set nm [open p1.nam w]
+        $ns namtrace-all $nm
+        set n0 [$ns node]
+        set n1 [$ns node]
+        set n2 [$ns node]
+        $ns color 1 "red"
+        $ns color 2 "green"
+        $n0 label "source"
+        $n1 label "source"
+        $n2 label "destination"
+        $ns duplex-link $n0 $n1 10mb 300ms DropTail
+        $ns duplex-link $n1 $n2 1mb 300ms DropTail
+        $ns set queue-limit $n0 $n1 10
+        $ns set queue-limit $n1 $n2 5
+        set udp0 [new Agent/UDP]
+        $ns attach-agent $n0 $udp0
+        set cbr1 [new Application/Traffic/CBR]
+        $cbr1 set packetSize_ 500
+        $cbr1 set interval _0.005
+        $cbr1 attach-agent $udp0
+        set udp1 [new Agent/UDP]
+        $ns attach-agent $n1 $udp1
+        set cbr2 [new Application/Traffic/CBR]
+        $cbr2 set packetSize_ 500
+        $cbr2 set interval_ 0.005
+        $cbr2 attach-agent $udp1
+        set null1 [new Agent/Null]
+        $ns attach-agent $n2 $null1
+        $udp0 set class_ 1
+        $udp1 set class_ 2
+        $ns connect $udp0 $null1
+        $ns connect $udp1 $null1
+        proc finish { } {
+            global ns tf nm
+            exec nam p1.nam &
+            $ns flush-trace
+            close $tf
+            close $nm
+            exit 0
+        }
+        $ns at 0.1 "$cbr1 start"
+        $ns at 0.1 "$cbr2 start"
+        $ns at 10.0 "finish"
+        $ns run
+    
+      </pre>
+
+      <h2>Awk Code</h2>
+      <pre>
+        BEGIN {
+            count = 0;
+        }
+        {
+            if ($1 == "d")
+                count++;
+        }
+        END {
+            printf("The total number of packets dropped due to congestion: %d\n\n", count);
+        }
+        </code>
+    </pre>
+</div>
+
+
+<div class="question" onclick="toggleAnswer('q6')">6)  Simulate the network with five nodes n0,n1,n2,n3,n4 forming a star
+    topology.The node n4 is at the center. Node n0 is a TCP source, which
+    transmits packets to the node 3(a TCP sink) through the node n4.
+    Node n1 is another traffic source and sends UDP packets to node n2
+    through n4. The duration of the simulation time is 10 seconds.
+</div>
+<div class="answer" id="q6">
+    <pre>
+        set ns [ new Simulator ]
+        set tr1 [ open b2.tr w ]
+        $ns trace-all $tr1
+        set nm1 [open b2.nam w ]
+        $ns namtrace-all $nm1
+        set n0 [$ns node]
+        set n1 [$ns node]
+        set n2 [$ns node]
+        set n3 [$ns node]
+        set n4 [$ns node]
+        $n0 label "TCPSOURCE"
+        $n1 label "UDPSOURCE"
+        $n2 label "UDPDESTINATION"
+        $n3 label "TCPDESTINATION"
+        $n4 label "ROUTER"
+        $ns color 1 "blue"
+        $ns color 2 "red"
+        $n0 color "green"
+        $n3 color "green"
+        $n1 color "orange"
+        $n2 color "orange"
+        $n4 shape square
+        $ns duplex-link $n0 $n4 1Mb 20ms DropTail
+        $ns duplex-link $n1 $n4 1Mb 20ms DropTail
+        $ns duplex-link $n4 $n2 1Mb 20ms DropTail
+        $ns duplex-link $n4 $n3 1Mb 20ms DropTail
+        $ns duplex-link-op $n0 $n4 orient left-up
+        $ns duplex-link-op $n1 $n4 orient right-up
+        $ns duplex-link-op $n4 $n2 orient right-up
+        $ns duplex-link-op $n4 $n3 orient left-up
+        set tcp1 [new Agent/TCP]
+        $ns attach-agent $n0 $tcp1
+        set sink1 [new Agent/TCPSink]
+        $ns attach-agent $n3 $sink1
+        set ftp1 [new Application/FTP]
+        $ftp1 attach-agent $tcp1
+        $ftp1 set packetSize_ 500
+        $ftp1 set interval_ 0.005
+        $ns connect $tcp1 $sink1
+        set udp1 [new Agent/UDP]
+        $ns attach-agent $n1 $udp1
+        set null1 [new Agent/Null]
+        $ns attach-agent $n2 $null1
+        $ns connect $udp1 $null1
+        set cbr1 [new Application/Traffic/CBR]
+        $cbr1 attach-agent $udp1
+        $cbr1 set packetSize_ 500
+        $cbr1 set interval_ 0.005
+        $tcp1 set class_ 1
+        $udp1 set class_ 2
+        $ns at 0.5 "$ftp1 start"
+        $ns at 9.5 "$ftp1 stop"
+        $ns at 1.0 "$cbr1 start"
+        $ns at 9.9 "$cbr1 stop"
+        proc finish { } {
+            global ns tr1 nm1
+            $ns flush-trace
+            exec nam b2.nam &
+            close $tr1
+            close $nm1
+            exit 0
+        }
+        $ns at 10.0 "finish"
+        $ns run
+    </pre>
+</div>
+
+<div class="question" onclick="toggleAnswer('q7')">7) simulate to study transmission of packets over ethernet LAN and
+    determine the number of packets drop destination.
+</div>
+<div class="answer" id="q7">
+    <pre>
+        set ns [new Simulator]
+        set tr1 [open b2.tr w]
+        $ns trace-all $tr1
+        set nm1 [open b2.nam w]
+        $ns namtrace-all $nm1
+        set n0 [$ns node]
+        set n1 [$ns node]
+        set n2 [$ns node]
+        set n3 [$ns node]
+        set n4 [$ns node]
+        set n5 [$ns node]
+        $ns color 1 "blue"
+        $ns color 2 "red"
+        $ns duplex-link $n0 $n2 1Mb 200ms DropTail
+        $ns duplex-link $n1 $n2 1Mb 100ms DropTail
+        $ns duplex-link $n2 $n3 0.6Mb 100ms DropTail
+        $ns duplex-link-op $n0 $n2 orient right-down
+        $ns duplex-link-op $n1 $n2 orient right-up
+        $ns duplex-link-op $n2 $n3 orient right
+        set lan [$ns newLan "$n3 $n4 $n5" 0.6Mb 40ms LL Queue/DropTail Mac/802_3 Channel]
+        $ns set queue-limit $n2 $n3 20
+        $ns duplex-link-op $n2 $n3 queuePos 5.0
+        set tcp1 [new Agent/TCP]
+        $ns attach-agent $n0 $tcp1
+        set sink1 [new Agent/TCPSink]
+        $ns attach-agent $n4 $sink1
+        set ftp1 [new Application/FTP]
+        $ftp1 attach-agent $tcp1
+        $ftp1 set packetSize_ 500
+        $ftp1 set interval_ 0.005
+        $ns connect $tcp1 $sink1
+        set tcp2 [new Agent/TCP]
+        $ns attach-agent $n1 $tcp2
+        set sink2 [new Agent/TCPSink]
+        $ns attach-agent $n5 $sink2
+        set ftp2 [new Application/FTP]
+        $ftp2 attach-agent $tcp2
+        $ftp2 set packetSize_ 500
+        $ftp2 set interval_ 0.001
+        $ns connect $tcp2 $sink2
+        $tcp1 set class_ 1
+        $tcp2 set class_ 2
+        $ns at 0.5 "$ftp1 start"
+        $ns at 4.9 "$ftp1 stop"
+        $ns at 1.0 "$ftp2 start"
+        $ns at 4.9 "$ftp2 stop"
+        proc finish { } {
+            global ns tr1 nm1
+            $ns flush-trace
+            exec nam b2.nam &
+            close $tr1
+            close $nm1
+            exit 0
+        }
+        $ns at 5.0 "finish"
+        $ns run
+    </pre>
+
+    <h1>Awk Code</h1>
+    <pre>
+        Ethernet.awk
+        BEGIN {
+            c = 0;
+            c1 = 0;
+        }
+        {
+            if ($1 == "d" && $9 == "0.0" && $10 == "4.0")
+                c++;
+            if ($1 == "d" && $9 == "1.0" && $10 == "5.0")
+                c1++;
+        }
+        END {
+            printf("\n number of packets dropped at the destination node4 %d", c);
+            printf("\n number of packets dropped at the destination node5 %d", c1);
+        }
+    </pre>
+</div>  
+</div>
+
+
+</body>
+<script>
+    function toggleAnswer(id) {
+        var answer = document.getElementById(id);
+        if (answer.style.display === "none") {
+            answer.style.display = "block";
+        } else {
+            answer.style.display = "none";
+        }
+    }
+</script>
+</html>

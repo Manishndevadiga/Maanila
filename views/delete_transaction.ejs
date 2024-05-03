@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Transaction</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+
+      background-color: #f8f9fa;
+      padding: 50px;
+    }
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-control {
+      border-radius: 5px;
+    }
+    .btn-primary {
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title text-center">Personal Information</h4>
+            <form id="transactionForm" action="/transaction/delete_transaction" method="POST">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="name">Name:</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="year"> Year:</label>
+                  <input type="number" class="form-control" id="year" name="year" placeholder="Enter your birth year">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table id="transactionTable" class="table table-bordered">
+            <thead class="thead-dark">
+              <tr>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody id="transactionData">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('transactionForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const year = document.getElementById('year').value;
+      
+      fetch('/transaction/delete_transaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '/*',
+        },
+        body: JSON.stringify({ name, year })
+      })
+      .then((response) => {
+        const contentType = response.headers.get('content-type');
+
+        if (contentType && contentType.includes('application/json'))
+            {
+      return response.json()
+      .then(data => {
+        if (data) {
+          const transactionData = document.getElementById('transactionData');
+          transactionData.innerHTML = ''; // Clear existing data
+          
+          // Combine all transactions into a single array
+          const allTransactions = [...data.donation, ...data.monthly, ...data.yearly];
+
+          // Sort transactions by date in descending order
+          allTransactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          
+          // Format and populate transactions
+          allTransactions.forEach(transaction => {
+            const dateParts = transaction.timestamp.split('-');
+            const localTime = `${dateParts[2].split('T')[0]}/${dateParts[1]}/${dateParts[0]}`;
+            const type = data.donation.includes(transaction) ? 'Donation' :
+                         data.monthly.includes(transaction) ? 'Monthly' :
+                         'Yearly';
+            transactionData.innerHTML += `<tr><td>${type}</td><td>${localTime}</td><td>${dateParts[2].split('T')[1].slice(0, -1)}</td><td>${transaction.amount}</td></tr>`;
+          });
+       } 
+      });
+    } 
+    else if (response.redirected) {
+        window.location.href = response.url;
+    }
+    else {
+          console.log('No data received from the server');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  </script>
+</body>
+</html>

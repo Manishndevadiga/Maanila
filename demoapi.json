@@ -1,0 +1,32 @@
+ [
+    {
+      "company": "Apple",
+      "model": "iPhone 13",
+      "price": 799,
+      "releaseYear": 2021
+    },
+    {
+      "company": "Samsung",
+      "model": "Galaxy S21",
+      "price": 700,
+      "releaseYear": 2021
+    },
+    {
+      "company": "Google",
+      "model": "Pixel 6",
+      "price": 599,
+      "releaseYear": 2021
+    },
+    {
+      "company": "OnePlus",
+      "model": "9 Pro",
+      "price": 969,
+      "releaseYear": 2021
+    },
+    {
+      "company": "Xiaomi",
+      "model": "Mi 11",
+      "price": 749,
+      "releaseYear": 2021
+    }
+  ]

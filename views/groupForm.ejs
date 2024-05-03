@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+   body {
+      background-color: #387ADF;
+      padding: 20px;
+    }
+
+    .navbar{
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+    height:90px;
+    background-color:#0C359E;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+   }
+
+   .navigation{
+    position:absolute;
+    background-color: #2D3250;
+    height: 300px;
+    width: 250px;
+    border-radius: 10px;
+    z-index: 999;
+    margin-top: -15px;
+    margin-left: 20px;
+    display:none;
+   }
+
+   ul{
+    list-style-type: none; 
+    text-align: center;
+    margin-top: 20px;
+    padding:20px;
+   }
+   a{
+    color: white;
+    text-decoration: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   }
+   li {
+     color: white;
+     font-size: 18px;
+     text-decoration: none;
+     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   }
+   li{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition: all .3s ease-in;
+    padding-top: 30px;
+   }
+   li:hover{
+        transform: scale(1.1);
+        cursor: pointer;
+        background-color: #31375a;
+   }
+   a:hover{
+    text-decoration: none;
+    color:rgb(93, 93, 163);
+   }
+
+#logo{
+  margin-left: 40%;
+  margin-top: 10px;
+}
+
+   img{
+    height:45px;
+    width:45px;
+   }
+
+
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 100px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    #name-validation{
+    color: red;
+}
+  </style>
+</head>
+<body>
+
+
+  <div class="navigation"> 
+    <div class="logo" id="logo"><img src="https://as1.ftcdn.net/v2/jpg/00/69/37/26/1000_F_69372697_LSptpUKLbHwJSeCdBZ2uINqCQkg34oBF.jpg" alt="logo" class="logo1"  onclick="closeNav()"></div>
+    <ul>
+      <li><a href="/group/groupForm">ADD GROUP</a></li>
+      <li><a href="/budget/issue_budget">ISSUE BUDGET</a></li>
+      <li><a href="/people/admin_dashboard">ADMIN DASHBOARD</a></li>
+    </ul>
+  </div>
+
+  <div class="navbar">
+    <div class="nav">
+        <div class="logo"><img src="https://icon-library.com/images/white-menu-icon-png/white-menu-icon-png-18.jpg" alt="logo" onclick="openNav()"></div>
+    </div>
+    
+    <div ><a href="/home">HOME</a></div>
+    <div> <a href="/people/peopleForm">ADD USERS</a></div>
+    <div><a href="/people/user_details">USER DETAILS</a></div>
+    <div><a href="/payment/pending">PENDING STATUS</a></div>
+
+</div>
+  <div class="container">
+    <h2 class="text-center mb-4">GROUP FORM</h2>
+    <form action="/group/groupForm" method="post" id="groupForm">
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter New Group Name" required>
+            <div id="name-validation"></div> 
+        </div> 
+
+      <div class="form-group">
+        <label for="head">Head:</label>
+        <input type="text" class="form-control" id="head" name="head" placeholder="Enter the name of main person in the group" required>
+      </div>
+      <div class="form-group">
+        <label for="place">Place:</label>
+        <input type="text" class="form-control" id="place" name="place" placeholder="Enter the place" required>
+      </div>
+      <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</body>
+<script>
+    document.getElementById('name').addEventListener('input', function() {
+        const name = this.value;
+
+       console.log(name);
+
+        $.ajax({
+            url: '/group/checkGroup', 
+            method: 'POST', 
+            data: { name: name }, 
+            success: function(response) {
+                if (response.exists) {
+                    console.log('Name already exists');
+                    $('#name-validation').text('Name already exists');
+                    $('#submit-button').prop('disabled', true);
+                } else {
+                    console.log('available');
+                    $('#name-validation').text('');
+                    $('#submit-button').prop('disabled', false);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error); 
+            }
+        });
+    });
+</script>
+
+<script>
+  window.addEventListener('beforeunload', function(event) {
+  
+  document.getElementById('groupForm').reset(); 
+});
+</script>
+
+<script>
+  function openNav() {
+       document.querySelector('.navigation').style.display = 'block';
+   }
+   function closeNav() {
+       document.querySelector('.navigation').style.display = 'none';
+   }
+</script>
+
+</html>
+

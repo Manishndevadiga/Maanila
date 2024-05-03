@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f0f0;
+        }
+
+        .navbar{
+    height:90px;
+    background-color:#0C359E;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+   }
+
+   .navigation{
+    position:absolute;
+    background-color: #2D3250;
+    height: 300px;
+    width: 250px;
+    border-radius: 10px;
+    z-index: 1;
+    margin-top: 15px;
+    margin-left: 20px;
+    display:none;
+   }
+
+   ul{
+    list-style-type: none; 
+    text-align: center;
+    margin-top: 20px;
+    padding:20px;
+   }
+   a{
+    color: white;
+    text-decoration: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   }
+   li {
+     color: white;
+     font-size: 18px;
+     text-decoration: none;
+     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   }
+   li{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition: all .3s ease-in;
+    padding-top: 30px;
+   }
+   li:hover{
+        transform: scale(1.1);
+        cursor: pointer;
+        background-color: #31375a;
+   }
+   a:hover{
+    text-decoration: none;
+    color:rgb(93, 93, 163);
+   }
+
+#logo{
+  margin-left: 40%;
+  margin-top: 10px;
+}
+
+   img{
+    height:45px;
+    width:45px;
+   }
+
+   .nav{
+display:flex;
+justify-content:space-around;
+align-items:center;
+   }
+
+   .nav1,.nav2 ,.nav3{
+    background-color: green;
+    color:white;
+    border:2px solid white;
+    border-radius: 10px;  
+    height: 50px;
+    width: 100%;
+    align-items: center;
+    margin-top: 50px;
+   }
+
+    </style>
+</head>
+<body>
+
+
+  <div class="navigation"> 
+    <div class="logo" id="logo"><img src="https://as1.ftcdn.net/v2/jpg/00/69/37/26/1000_F_69372697_LSptpUKLbHwJSeCdBZ2uINqCQkg34oBF.jpg" alt="logo" class="logo1"  onclick="closeNav()"></div>
+    <ul>
+      <li><a href="/group/groupForm">ADD GROUP</a></li>
+      <li><a href="/budget/issue_budget">ISSUE BUDGET</a></li>
+      <li><a href="/people/admin_dashboard">ADMIN DASHBOARD</a></li>
+    </ul>
+  </div>
+
+  <div class="navbar">
+    <div class="nav">
+        <div class="logo"><img src="https://icon-library.com/images/white-menu-icon-png/white-menu-icon-png-18.jpg" alt="logo" onclick="openNav()"></div>
+    </div>
+    
+    <div ><a href="/home">HOME</a></div>
+    <div> <a href="/people/peopleForm">ADD USERS</a></div>
+    <div><a href="/people/user_details">USER DETAILS</a></div>
+    <div><a href="/payment/pending">PENDING STATUS</a></div>
+
+</div>
+
+    <div class="nav"> 
+       <a href="/people/download"><button class="nav1">User Details Excel Sheet</button></a>
+       <a href="/transaction/transaction"><button class="nav2">Transaction History</button></a> 
+       <a href="index.html"><button class="nav3">Update Issue Budget</button></a> 
+  </div>
+    
+</body>
+
+<script>
+  function openNav() {
+       document.querySelector('.navigation').style.display = 'block';
+   }
+   function closeNav() {
+       document.querySelector('.navigation').style.display = 'none';
+   }
+</script>
+</html>

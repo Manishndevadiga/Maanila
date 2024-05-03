@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+   
+   .navbar{
+    height:90px;
+    background-color:#0C359E;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+   }
+
+   .navigation{
+    position:absolute;
+    background-color: #2D3250;
+    height: 300px;
+    width: 250px;
+    border-radius: 10px;
+    z-index: 1;
+    margin-top: 15px;
+    margin-left: 20px;
+    display:none;
+   }
+
+    ul{
+    list-style-type: none; 
+    text-align: center;
+    margin-top: 20px;
+    padding:20px;
+   }
+   a{
+    color: white;
+    text-decoration: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   }
+   li {
+     color: white;
+     font-size: 18px;
+     text-decoration: none;
+     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   }
+   li{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition: all .3s ease-in;
+    padding-top: 30px;
+   }
+   li:hover{
+        transform: scale(1.1);
+        cursor: pointer;
+        background-color: #31375a;
+   }
+   a:hover{
+    text-decoration: none;
+    color:rgb(93, 93, 163);
+   }
+
+#logo{
+  margin-left: 40%;
+  margin-top: 10px;
+}
+
+   img{
+    height:45px;
+    width:45px;
+   }
+
+
+  .heading{
+    width:500px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    color:rgb(29, 45, 218);
+  }
+
+  .btn{
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    height: 40px;
+    width: 100px;
+    margin-left: 20px;
+  }
+
+  .container-fluid{
+    width:100%;
+  }
+  .searchbox{
+width: 200px;
+border:0.5px solid black;
+  }
+
+  ::placeholder {
+  font-weight: 100; 
+}
+
+  #navbarSupportedContent{
+    margin-left: 0px;
+    width: 200px;
+    height: 40px;
+  }
+
+.dropdown{
+  margin-top: 10px;
+  width:230px;
+}
+.content{
+background-color: rgb(237, 237, 245);
+}
+
+.user{
+  display:flex;
+  margin-top: 10px;
+  padding: 10px;
+  flex-wrap: wrap;
+  height:150px;
+  width: 100%;
+  background-color: #40A2E3;
+  border-radius: 10px;
+}
+
+input , #eligibilitySelect, #maritalStatusSelect{
+  margin-left: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  height: 40px;
+  border: none;
+  outline: none;
+  width:160px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+.label{
+    margin-top: 20px;
+    margin-left: 30px;
+    color:rgb(15, 14, 17);
+
+}
+.details{
+    display:flex;
+    width: 100%;
+    background-color: rgb(241, 242, 245);
+    border-radius: 10px;
+}
+.column{
+  width: 25%;
+  margin:10px;
+  height: 80%;
+  background-color: #211C6A;
+  text-align: center;
+  border-radius: 20px;
+  padding-top: 30px;
+  color:white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
+}
+
+.column:hover{
+  transform: scale(1.1);
+  transition: all .3s ease-in;
+}
+
+.acceptPaymentBtn , .history{
+  height: 40px;
+  width:160px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .3s ease;
+  background-color: green;
+  color: aliceblue;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 30px;
+  margin-top: 15px;
+}
+
+.history{
+  padding-top: 8px;
+  text-align: center;
+}
+
+#name{
+  font-weight: bold;
+  font-size: 30px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#particularUser .user {
+background-color: rgb(193, 209, 223);
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+::-webkit-scrollbar-track {
+  background: #efe6e6;
+}
+
+  </style>
+</head>
+<body>
+  <div class="navigation"> 
+    <div class="logo" id="logo"><img src="https://as1.ftcdn.net/v2/jpg/00/69/37/26/1000_F_69372697_LSptpUKLbHwJSeCdBZ2uINqCQkg34oBF.jpg" alt="logo" class="logo1"  onclick="closeNav()"></div>
+    <ul>
+      <li><a href="/group/groupForm">ADD GROUP</a></li>
+      <li><a href="/budget/issue_budget">ISSUE BUDGET</a></li>
+      <li><a href="/people/admin_dashboard">ADMIN DASHBOARD</a></li>
+    </ul>
+  </div>
+
+  <div class="navbar">
+    <div class="nav">
+        <div class="logo"><img src="https://icon-library.com/images/white-menu-icon-png/white-menu-icon-png-18.jpg" alt="logo" onclick="openNav()"></div>
+    </div>
+    
+    <div ><a href="/people/peopleForm">ADD USER</a></div>
+    <div> <a href="/payment/create_acc">CREATE  ACCOUNT</a></div>
+    <div><a href="/people/user_details">USER DETAILS</a></div>
+    <div><a href="/payment/pending">PENDING STATUS</a></div>
+
+</div>
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">   
+      <input class="searchbox" id="searchInput" type="search" placeholder="Search User" aria-label="Search">
+      <button class="btn" onclick="searchUser()">Search</button>
+    </div>
+    <div class="heading"> </div>
+    <div class="dropdown">
+      <div class="form-group">
+          <select class="form-control" id="group" name="group" required>
+              <option value="">Select group name</option>
+          </select>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div class="details" >   
+</div>
+
+<div class="particularUser" id="particularUser">
+ 
+</div>
+
+
+
+<div id="paymentContainer" class="paymentContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+  <div style="position: absolute; top: 50%; left: 50%; width: 50%; height:50%; transform: translate(-50%, -50%); background-color: white; padding: 20px;text-align: center;padding-top: 60px;border-radius: 20px;">
+
+   <span id="name"></span>,  <h3> If Doesn't Have an Account Yet? Create One</h3>
+    <h4>Check whether user is eligible or not</h4>
+    <button onclick="closebtn()" style="position: absolute; bottom: 20px; left: 25%; transform: translateX(-50%); background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">Close</button>
+    <a href="/payment/create_acc">
+      <button style="position: absolute; bottom: 20px; left: 75%; transform: translateX(-50%); background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">Create Account</button>
+    </a>
+  </div>
+</div>
+
+<div id="bill" class="bill" >
+
+</div>
+
+<div id="paymentContainer1" class="paymentContainer1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+  <div style="position: absolute; top: 50%; left: 50%; width: 60%; height: 70%; transform: translate(-50%, -50%); background-color: white; padding: 20px;border-radius: 20px;">
+      <div class="container">
+          <h1 class="text-center mb-4">Payment Form</h1>
+          <form id="paymentForm"  action="/payment/payment_update" method="post" class="row">
+              <div class="col-sm-6">
+                  <div class="form-group">
+                      <label for="username">Username:</label>
+                      <input type="text" id="username" name="username" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                      <label for="groupname">Group Name:</label>
+                      <input type="text" id="groupname" name="groupname" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                      <label for="mothername">Mother Name:</label>
+                      <input type="text" id="mothername" name="mothername" class="form-control" readonly>
+                  </div>
+              </div>
+              <div class="col-sm-6">
+                  <div class="form-group">
+                      <label for="paymentType">Payment Type:</label>
+                      <select class="form-control" id="paymentType" name="paymentType">
+                          <option value="monthly">Monthly</option>
+                          <option value="yearly">Yearly</option>
+                          <option value="donation">Donation</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label for="year">Year:</label>
+                      <select class="form-control" id="year" name="year">
+                      </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="amount">Amount :</label>
+                    <input type="text" id="amount" name="amount" class="form-control" >
+                </div>
+                  <div class="text-center">
+                      <button type="submit" class="btn btn-primary" >Submit</button>           
+                  </div>
+              </div>
+              </form>
+          <!-- </div> -->
+          <button onclick="closebtn()"  class="btn btn-secondary ml-2" style="position: absolute; bottom: 20px; left: 25%; transform: translateX(-50%); background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">Close</button>
+      </div>
+  </div>
+</div>
+
+
+
+
+  <div class="content" id="members">  
+  </div>
+
+
+</body>
+
+
+<script>
+
+
+document.getElementById("paymentForm").addEventListener("submit", function(event) {
+   
+    event.preventDefault();
+
+    const amountValue = parseFloat(document.getElementById("amount").value);
+  
+    var formData = {
+        username: document.getElementById("username").value,
+        groupname: document.getElementById("groupname").value,
+        mothername: document.getElementById("mothername").value,
+        paymentType: document.getElementById("paymentType").value,
+        year: document.getElementById("year").value,
+        amount:amountValue,
+    };
+
+
+    console.log(formData);
+
+    console.log(amountValue);
+    console.log(typeof amountValue);
+   
+    fetch("/payment/payment_update", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        
+        console.log(data.type);
+
+
+        if(data.success){
+          document.querySelector('.paymentContainer1').style.display = 'none';
+
+          var billDiv = document.querySelector('#bill');
+
+          billDiv.innerHTML = `<div class="paymentContainer2" style="display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+  <div style="position: absolute; top: 50%; left: 50%; width: 50%; height:50%; transform: translate(-50%, -50%); background-color: white; padding: 20px;text-align: center;padding-top: 60px;border-radius: 20px;">
+<h1 style:color="green">Payment Successfull</h1>
+          
+     <h3>  <p><b>Username:</b>  ${data.name}  </p></h3>
+       <h3>  <p><b>Paid Amount :</b>  ${data.amount} </p> </h3>
+
+   <button onclick="closebtn1()" style="position: absolute; bottom: 20px; left: 34%; transform: translateX(-50%); background-color: red; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">Close</button>
+   <button onclick="printBill('${data.name}','${data.amount}','${data.type}')" style="position: absolute; bottom: 20px; left: 68%; transform: translateX(-50%); background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">Print Bill</button>
+  </div>
+</div>
+  `;
+
+         
+        }
+        
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        
+    });
+});
+
+
+function printBill(name , amount , type){
+ console.log(name , amount);
+
+ const data={
+  name,
+  amount,
+  type
+ };
+    fetch('/payment/generate_bill', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'   
+                },
+               body: JSON.stringify(data)  
+            }).then(response => {
+    if (response.ok) {
+        return response.blob();
+    } else {
+        throw new Error('Failed to generate PDF');
+    }
+})
+.then(blob => {
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+})
+.catch(error => {
+    console.error('Error:', error);
+});
+}
+             
+
+</script>
+
+<script>
+function searchUser() {
+  var search = document.getElementById("searchInput").value;
+ 
+  console.log(search);
+
+  fetch('/people/find_users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: search })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) { 
+                  const usersData = data.peopleData;
+        const particularUserDiv = document.getElementById("particularUser");
+        particularUserDiv.innerHTML = ''; // Clear previous content
+
+        usersData.forEach(user => {
+            const userDiv = document.createElement('div');
+            userDiv.classList.add('user');
+            userDiv.setAttribute('data-username', user._id);
+
+            userDiv.innerHTML = `
+                <div class="label"> Name:</div>
+                <input type="text" class="${user._id}" value="${user.name}">
+                <div class="label"> Group:</div>
+                <input type="text" class="${user._id}" value="${user.group}">
+                <div class="label"> Address:</div>
+                <input type="text" class="${user._id}" value="${user.address}">
+                <div class="label"> Age:</div>
+                <input type="text" class="${user._id}" value="${user.age}">
+                <div class="label">Eligible:</div>
+                <select class="eligibilitySelect ${user._id}" id="eligibilitySelect" onchange="sendSelectedValue(this, '${user._id}')">
+                    <option value="true" ${user.eligible === 'true' ? 'selected' : ''}>True</option>
+                    <option value="false" ${user.eligible === 'false' ? 'selected' : ''}>False</option>
+                </select>
+                <div class="label"> Gender:</div>
+                <input type="text" class="${user._id}" value="${user.gender}">
+                <div class="label"> Job:</div>
+                <input type="text" class="${user._id}" value="${user.job}">
+                <div class="label">Marital Status:</div>
+                <select class="maritalStatusSelect ${user._id}" id="maritalStatusSelect" onchange="sendSelectedValues(this, '${user._id}')">
+                    <option value="single" ${user.maritalStatus === 'single' ? 'selected' : ''}>Single</option>
+                    <option value="married" ${user.maritalStatus === 'married' ? 'selected' : ''}>Married</option>
+                    <option value="divorced" ${user.maritalStatus === 'divorced' ? 'selected' : ''}>Divorced</option>
+                    <option value="widowed" ${user.maritalStatus === 'widowed' ? 'selected' : ''}>Widowed</option>
+                </select>
+                <div class="label"> Mobile No: </div>
+                <input type="text" class="${user._id}" value="${user.mobileNo}">
+                <div class="label"> Mother Name: </div>
+                <input type="text" class="${user._id}" value="${user.motherName}">
+                <button class="acceptPaymentBtn ${user._id}" onclick="acceptPayment('${user.name}','${user.group}','${user.motherName}')">Add Payment</button>
+                <a href="/user_details" class="history"> History</a>
+            `;
+
+            particularUserDiv.appendChild(userDiv);
+        });
+                } else {
+                console.log('User not found');
+                alert('User Not Found 😒, Please Enter The Correct Name');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+   
+  
+}
+
+</script>
+
+<script>
+
+function acceptPayment(username, groupname, mothername) {
+  console.log("clicked");
+
+
+  fetch('/payment/add_payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) { 
+                  console.log(data.uniqueYears);
+                  document.querySelector('.paymentContainer1').style.display = 'block';
+                  document.getElementById('username').value = username;
+                  document.getElementById('groupname').value = groupname;
+                  document.getElementById('mothername').value = mothername;
+                  const yearDropdown = document.getElementById('year');
+                  yearDropdown.innerHTML = '';
+                  data.uniqueYears.forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearDropdown.appendChild(option);
+        });
+                } else {
+                  document.querySelector('.paymentContainer').style.display = 'block';
+                  document.getElementById('name').innerHTML =  username;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+
+
+ 
+    }
+
+
+
+    function closebtn() {
+      document.querySelector('.paymentContainer').style.display = 'none';
+      document.querySelector('.paymentContainer1').style.display = 'none';
+      
+    }
+
+    function closebtn1() {
+      document.querySelector('.paymentContainer2').style.display = 'none';
+      location.reload();
+    }
+
+
+
+
+
+
+    
+    function openNav() {
+        document.querySelector('.navigation').style.display = 'block';
+    }
+    function closeNav() {
+        document.querySelector('.navigation').style.display = 'none';
+    }
+    
+    $(document).ready(function() {
+        $.ajax({
+            url: "/group/groups", 
+            type: "GET",
+            success: function(groups) {
+                console.log(groups);
+                groups.groups.forEach(function(group) {
+                    $('#group').append($('<option>', {
+                        value: group._id, 
+                        text: group.name 
+                        
+                    }));
+                   
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error); 
+            }
+        });
+    });
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  const dropdown = document.getElementById('group');
+  const heading = document.querySelector('.heading');
+
+  dropdown.addEventListener('change', async function() {
+    const selectedGroupName = dropdown.value;
+    heading.textContent = selectedGroupName !== '' ? selectedGroupName : '';
+
+    if (selectedGroupName) {
+      try {
+        const response = await fetch(`/people/get_users?name=${selectedGroupName}`); 
+        const ResponseData = await response.json();
+        console.log(ResponseData);
+
+        const usersData= ResponseData.users;
+        const netAmt=ResponseData.totalNetAmount;
+
+        
+
+let totalUsers = usersData.length;
+let eligibleTrueCount = 0;
+let maleCount = 0;
+let femaleCount = 0;
+
+// Calculate counts
+usersData.forEach(user => {
+    if (user.eligible === "true") {
+        eligibleTrueCount++;
+    }
+    if (user.gender === 'male') {
+        maleCount++;
+    }
+    if (user.gender === 'female') {
+        femaleCount++;
+    }
+});
+
+
+const detailsDiv = document.querySelector('.details');
+detailsDiv.innerHTML = `
+    <div class="column"><h1>${totalUsers}</h1><p>Total Users</p></div>
+    <div class="column"><h1>${eligibleTrueCount}</h1><p>Eligible</p></div>
+    <div class="column"><h1>${maleCount}</h1><p>Male</p></div>
+    <div class="column"><h1>${femaleCount}</h1><p>Female</p></div>
+    <div class="column"><h1>${netAmt}</h1><p>Net Amount</p></div>
+`;
+
+
+
+
+
+        const users = usersData.map(user => {
+
+  return `
+  <div class="user" data-username="${user._id}">
+      <div class="label"> Name:</div>
+      <input type="text" class="${user._Id}" value="${user.name}">
+      <div class="label"> Address:</div>
+      <input type="text" class="${user._Id}" value="${user.address}">
+      <div class="label"> Age:</div>
+      <input type="text" class="${user._Id}" value="${user.age}">
+
+      <div class="label">Eligible:</div>
+<select class="eligibilitySelect ${user._id}" id="eligibilitySelect" onchange="sendSelectedValue(this, '${user._id}')">
+  <option value="true" ${user.eligible === 'true' ? 'selected' : ''}>True</option>
+  <option value="false" ${user.eligible === 'false' ? 'selected' : ''}>False</option>
+</select>
+
+
+      <div class="label"> Gender:</div>
+      <input type="text" class="${user._Id}" value="${user.gender}">
+      <div class="label"> Job:</div>
+      <input type="text" class="${user._Id}" value="${user.job}">
+      
+
+      <div class="label">Marital Status:</div>
+<select class="maritalStatusSelect ${user._Id}" id="maritalStatusSelect" onchange="sendSelectedValues(this, '${user._id}')">
+  <option value="single" ${user.maritalStatus === 'single' ? 'selected' : ''}>Single</option>
+  <option value="married" ${user.maritalStatus === 'married' ? 'selected' : ''}>Married</option>
+  <option value="divorced" ${user.maritalStatus === 'divorced' ? 'selected' : ''}>Divorced</option>
+  <option value="widowed" ${user.maritalStatus === 'widowed' ? 'selected' : ''}>Widowed</option>
+</select>
+
+
+      <div class="label"> Mobile No: </div>
+      <input type="text" class="${user._Id}" value="${user.mobileNo}">
+      <div class="label"> Mother Name: </div>
+      <input type="text" class="${user._Id}" value="${user.motherName}">
+
+      <button id="${user._id}" class="acceptPaymentBtn ${user._id}" onclick="acceptPayment('${user.name}','${user.group}','${user.motherName}')">Add Payment</button>
+      <a href="/people/user_details" class="history"> History</a>
+    </div>
+  `;
+});
+
+document.getElementById("members").innerHTML=users.join('');   
+
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    }
+  });
+});
+
+
+</script>
+
+
+<script>
+async function sendSelectedValue(element,userId) {
+  var selectedValue = element.value;
+  console.log(selectedValue);
+
+  
+ 
+  console.log(userId);
+
+  var data = {
+        selectedValue: selectedValue,
+        userId: userId
+    };
+
+   
+    var fetchOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+
+    fetch('/people/update_eligibil', fetchOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Selected value sent to the backend successfully');
+           
+        })
+        .catch(error => {
+            console.error('Error sending selected value to the backend:', error);
+           
+        });
+}
+ 
+</script>
+
+
+<script>
+  function sendSelectedValues(element,userId) {
+    var selectedValue = element.value;
+    console.log(selectedValue);
+    console.log(userId);
+  
+    var data = {
+          selectedValue: selectedValue,
+          userId: userId
+      };
+  
+     
+      var fetchOptions = {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      };
+  
+     
+      fetch('/people/update_marital', fetchOptions)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json(); 
+          })
+          .then(data => {
+              console.log('Selected value sent to the backend successfully');
+              
+          })
+          .catch(error => {
+              console.error('Error sending selected value to the backend:', error);
+             
+          });
+  }
+   
+  </script>
+
+<script>
+  window.addEventListener('beforeunload', function(event) {
+  
+  document.getElementById('user-form').reset(); 
+});
+</script>
+
+
+
+</html>
