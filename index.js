@@ -25,6 +25,7 @@ const groupRoutes = require("./routes/groupRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const CustomError = require("./Utils/CustomError");
 const globalErrorHandler = require("./controllers/errorController");
+const logFlush = require("./Utils/logFlush");
 
 // const { dummy } = require("./middlewares/dummyMiddleware");
 
